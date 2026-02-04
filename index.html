@@ -6,26 +6,16 @@
 <style>
     body {
         text-align: center;
-        font-family: "Brush Script MT", cursive;
-        background: linear-gradient(-45deg, #ffccd5, #ffe6eb, #ffd1dc, #ffc0cb);
-        background-size: 400% 400%;
-        animation: gradientBG 15s ease infinite;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(to bottom, #ffccd5, #ffe6eb);
         overflow: hidden;
         margin-top: 120px;
     }
-
-    @keyframes gradientBG {
-        0% {background-position: 0% 50%;}
-        50% {background-position: 100% 50%;}
-        100% {background-position: 0% 50%;}
-    }
-
     h1 { 
         color: #d6336c; 
         font-size: 42px; 
         animation: fadeIn 2s ease-in-out; 
     }
-
     button {
         font-size: 22px;
         padding: 12px 28px;
@@ -35,16 +25,8 @@
         cursor: pointer;
         transition: 0.3s;
     }
-
-    #yesBtn { 
-        background-color: #ff4d6d; 
-        color: white; 
-    }
-    #yesBtn:hover { 
-        transform: scale(1.1);
-        box-shadow: 0 0 20px #ff4d6d;
-    }
-
+    #yesBtn { background-color: #ff4d6d; color: white; }
+    #yesBtn:hover { transform: scale(1.1); }
     #noBtn {
         background-color: #888;
         color: white;
@@ -52,31 +34,19 @@
         left: 55%;
         top: 60%;
     }
-
-    .heart, .rose, .petal {
+    .heart {
         position: fixed;
+        color: red;
         font-size: 20px;
         animation: floatUp 4s linear infinite;
         user-select: none;
     }
-
-    .heart { color: red; }
-    .rose { color: #ff007f; }
-    .petal { color: #ff69b4; font-size: 18px; animation: fallDown 7s linear infinite; }
-
     @keyframes floatUp {
         0% { transform: translateY(100vh); opacity: 1; }
         100% { transform: translateY(-10vh); opacity: 0; }
     }
-
-    @keyframes fallDown {
-        0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; }
-        100% { transform: translateY(110vh) rotate(360deg); opacity: 0; }
-    }
-
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-
-    #message, #surpriseMsg {
+    #message {
         font-size: 28px;
         color: #d6336c;
         margin-top: 40px;
@@ -93,79 +63,58 @@
 <button id="noBtn">No 😢</button>
 
 <div id="message">Yay! 💕 I’m so happy! You make my world brighter every day! 💖</div>
-<div id="surpriseMsg">💌 I can’t stop thinking about you! You’re my everything! 💖</div>
 
-<!-- Local MP3 file -->
-<audio id="music" src="perfect.mp3" preload="auto" loop></audio>
+<!-- Hidden audio for "Perfect" -->
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
 <script>
-const noBtn = document.getElementById("noBtn");
-const message = document.getElementById("message");
-const surprise = document.getElementById("surpriseMsg");
-const yesBtn = document.getElementById("yesBtn");
-const music = document.getElementById("music");
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+    const yesBtn = document.getElementById("yesBtn");
+    const audio = document.getElementById("bgMusic");
 
-// Move No button
-noBtn.addEventListener("mouseover", () => {
-    const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
-    const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
-    noBtn.style.left = x + "px";
-    noBtn.style.top = y + "px";
-});
+    // No button moves when hovered
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
 
-// Yes button click
-yesBtn.addEventListener("click", () => {
-    message.style.display = "block";
-    createHeartsAndRoses(50);
-    createPetals(30); // falling petals
-    music.currentTime = 0; // start from beginning
-    music.play(); // play music instantly
-    setTimeout(() => { surprise.style.display='block'; }, 5000);
-});
+    // Yes button action
+    yesBtn.addEventListener("click", () => {
+        message.style.display = "block";   // Show message
+        createHearts(50);                  // Start hearts
+        audio.play();                       // Play music
+    });
 
-// Floating hearts & roses
-function createHeartsAndRoses(count=10) {
-    for (let i=0; i<count; i++) {
-        setTimeout(() => {
-            createFloating("heart");
-            createFloating("rose");
-        }, i*200);
+    // Floating hearts
+    function createHearts(count=10) {
+        for (let i=0; i<count; i++) {
+            setTimeout(() => {
+                const heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "❤️";
+                heart.style.left = Math.random()*100 + "vw";
+                heart.style.fontSize = (Math.random()*30+20) + "px";
+                document.body.appendChild(heart);
+                setTimeout(()=>{ heart.remove(); }, 4000);
+            }, i*200);
+        }
+
+        setInterval(()=>{
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random()*100 + "vw";
+            heart.style.fontSize = (Math.random()*30+20) + "px";
+            document.body.appendChild(heart);
+            setTimeout(()=>{ heart.remove(); }, 4000);
+        }, 300);
     }
-
-    setInterval(() => {
-        createFloating("heart");
-        createFloating("rose");
-    }, 300);
-}
-
-// Floating petals from top
-function createPetals(count=10) {
-    for (let i=0; i<count; i++) {
-        setTimeout(() => {
-            createFloating("petal");
-        }, i*300);
-    }
-
-    setInterval(() => {
-        createFloating("petal");
-    }, 500);
-}
-
-// Helper function to create floating emoji
-function createFloating(type) {
-    const elem = document.createElement("div");
-    elem.classList.add(type);
-    if(type==="heart") elem.innerHTML = "❤️";
-    if(type==="rose") elem.innerHTML = "🌹";
-    if(type==="petal") elem.innerHTML = "🌸";
-    elem.style.left = Math.random()*100 + "vw";
-    elem.style.fontSize = (Math.random()*30+20) + "px";
-    if(type==="heart") elem.style.color = ['#ff4d6d','#ff69b4','#ffc0cb'][Math.floor(Math.random()*3)];
-    if(type==="rose") elem.style.color = '#ff007f';
-    if(type==="petal") elem.style.color = '#ff69b4';
-    document.body.appendChild(elem);
-    setTimeout(() => { elem.remove(); }, 7000);
-}
 </script>
 
 </body>
