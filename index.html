@@ -1,0 +1,144 @@
+<script>
+const herName = "Jordon"; 
+
+const song = document.getElementById("song");
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const lyricsDiv = document.getElementById("lyrics");
+const proposal = document.getElementById("proposal");
+const nameDiv = document.getElementById("name");
+const ring = document.getElementById("ring");
+
+nameDiv.textContent = herName;
+
+// =========================================================================
+// 🎵 SYNCING SETTINGS - ADJUST THESE IF NEEDED
+// =========================================================================
+
+// 1. When do the vocals actually start in your mp3? (in seconds)
+//    Play your mp3 file in a player. Note the exact second he says "I".
+const vocalStart = 18.8; 
+
+// 2. The Lyrics Data
+//    'time': Seconds after vocalStart when the line begins.
+//    'speed': How long (in ms) it takes to sing this specific line.
+const karaoke = [
+  { text: "I found a love...", time: 0, speed: 2500 },
+  { text: "For me...", time: 4.6, speed: 1500 },
+  { text: "Darling, just dive right in...", time: 9.0, speed: 3000 },
+  { text: "And follow my lead...", time: 13.5, speed: 2500 },
+  { text: "Well, I found a girl, beautiful and sweet...", time: 17.5, speed: 4500 }
+];
+
+// =========================================================================
+
+let currentLineIndex = -1;
+let wordInterval;
+
+// No button dodge logic
+noBtn.addEventListener("mouseover", () => {
+  const x = Math.random() * (window.innerWidth - 100);
+  const y = Math.random() * (window.innerHeight - 50);
+  noBtn.style.left = `${x}px`;
+  noBtn.style.top = `${y}px`;
+});
+
+yesBtn.onclick = () => {
+  song.currentTime = vocalStart; // Skip intro to start of vocals
+  song.volume = 1;
+  song.play();
+  startHearts();
+
+  // Show proposal after 24 seconds (approx when verse ends)
+  setTimeout(() => {
+    fadeOutSong();
+    showProposal();
+  }, 24000);
+};
+
+// The Syncing Logic
+song.addEventListener("timeupdate", () => {
+  // Current time relative to when vocals start
+  const relativeTime = song.currentTime - vocalStart;
+
+  karaoke.forEach((line, index) => {
+    // If the time is right, and we haven't shown this line yet
+    if (relativeTime >= line.time && currentLineIndex !== index) {
+      currentLineIndex = index;
+      showLyrics(line.text, line.speed);
+    }
+  });
+});
+
+function showLyrics(text, duration) {
+  // Clear previous timer
+  clearInterval(wordInterval);
+  
+  // Split text into words
+  const words = text.split(" ");
+  
+  // Put words into HTML, initially hidden (opacity 0.3 via CSS)
+  lyricsDiv.innerHTML = words
+    .map(word => `<span class="word">${word}</span>`)
+    .join(" ");
+
+  let i = 0;
+  const wordSpans = document.querySelectorAll(".word");
+  
+  // Calculate exact time per word to fit the duration
+  const timePerWord = duration / words.length;
+
+  wordInterval = setInterval(() => {
+    if (i < wordSpans.length) {
+      wordSpans[i].classList.add("active");
+      i++;
+    } else {
+      clearInterval(wordInterval);
+    }
+  }, timePerWord);
+}
+
+function fadeOutSong() {
+  const fade = setInterval(() => {
+    if (song.volume > 0.05) song.volume -= 0.05;
+    else { song.pause(); clearInterval(fade); }
+  }, 200);
+}
+
+function showProposal() {
+  document.getElementById("question").style.display = "none";
+  yesBtn.style.display = "none";
+  noBtn.style.display = "none";
+  lyricsDiv.style.display = "none";
+  proposal.style.display = "block";
+}
+
+ring.onclick = () => {
+  startFireworks();
+  document.getElementById("finalMsg").textContent =
+    "You are my today, my tomorrow, my forever ❤️";
+};
+
+function startHearts() {
+  setInterval(() => {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.textContent = Math.random() > 0.5 ? "❤️" : "🌹";
+    el.style.left = Math.random() * 100 + "vw";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+  }, 300);
+}
+
+function startFireworks() {
+  setInterval(() => {
+    const fw = document.createElement("div");
+    fw.className = "firework";
+    fw.textContent = "🎆";
+    fw.style.left = Math.random() * 100 + "vw";
+    fw.style.top = Math.random() * 60 + "vh";
+    document.body.appendChild(fw);
+    setTimeout(() => fw.remove(), 2500);
+  }, 400);
+}
+</script>
