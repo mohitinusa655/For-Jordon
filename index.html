@@ -59,22 +59,24 @@
 
 <h1>Jordon, Will You Be My Valentine? ❤️</h1>
 
-<button id="yesBtn" onclick="sayYes()">Yes 💖</button>
+<button id="yesBtn">Yes 💖</button>
 <button id="noBtn">No 😢</button>
 
 <div id="message">Yay! 💕 I’m so happy! You make my world brighter every day! 💖</div>
 
-<!-- Hidden background music -->
-<iframe width="0" height="0" 
-    src="https://www.youtube.com/embed/uOdphGs5uN0?autoplay=1&loop=1&playlist=uOdphGs5uN0" 
-    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
-</iframe>
+<!-- Hidden audio for "Perfect" -->
+<audio id="bgMusic" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+  Your browser does not support the audio element.
+</audio>
 
 <script>
     const noBtn = document.getElementById("noBtn");
     const message = document.getElementById("message");
+    const yesBtn = document.getElementById("yesBtn");
+    const audio = document.getElementById("bgMusic");
 
-    // Make the No button move away
+    // No button moves when hovered
     noBtn.addEventListener("mouseover", () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -83,13 +85,13 @@
     });
 
     // Yes button action
-    function sayYes() {
-        // Removed alert pop-up
-        message.style.display = "block"; // show the hidden message
-        createHearts(50); // start floating hearts
-    }
+    yesBtn.addEventListener("click", () => {
+        message.style.display = "block";   // Show message
+        createHearts(50);                  // Start hearts
+        audio.play();                       // Play music
+    });
 
-    // Floating hearts function
+    // Floating hearts
     function createHearts(count=10) {
         for (let i=0; i<count; i++) {
             setTimeout(() => {
