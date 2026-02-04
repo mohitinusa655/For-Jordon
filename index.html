@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Jordon ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #ffdde1, #ee9ca7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Brush Script MT", cursive;
+    overflow: hidden;
+    text-align: center;
+}
+
+h1 {
+    font-size: 46px;
+    color: #b8003c;
+    text-shadow: 0 0 15px pink;
+}
+
+button {
+    font-size: 24px;
+    padding: 14px 36px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 12px;
+}
+
+#yes {
+    background: #ff2f6d;
+    color: white;
+}
+
+#no {
+    background: #777;
+    color: white;
+    position: absolute;
+}
+
+#lyrics, #final {
+    display: none;
+    font-size: 30px;
+    color: #b8003c;
+    margin-top: 20px;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px pink; }
+    to { text-shadow: 0 0 25px red; }
+}
+
+.float {
+    position: fixed;
+    font-size: 28px;
+    animation: floatUp 6s linear forwards;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Jordon, will you be my Valentine? ❤️</h1>
+
+<button id="yes">Yes 💖</button>
+<button id="no">No 😢</button>
+
+<div id="lyrics"></div>
+<div id="final">Will you be mine forever, Jordon? 💍❤️</div>
+
+<audio id="song" src="perfect.mp3" preload="auto"></audio>
+
+<script>
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const song = document.getElementById("song");
+const lyricsDiv = document.getElementById("lyrics");
+const finalDiv = document.getElementById("final");
+
+const lyrics = [
+    "I found a love… 💕",
+    "For me…",
+    "Darling, just dive right in…",
+    "And follow my lead…",
+    "Well, I found a girl…",
+    "Beautiful and sweet…"
+];
+
+// NO button runs away
+noBtn.addEventListener("mouseover", () => {
+    noBtn.style.left = Math.random() * 80 + "vw";
+    noBtn.style.top = Math.random() * 80 + "vh";
+});
+
+// YES button
+yesBtn.addEventListener("click", () => {
+    song.currentTime = 0;
+    song.play();
+    startLove();
+    showLyrics();
+});
+
+// Hearts & roses
+function startLove() {
+    setInterval(() => {
+        createFloat("❤️");
+        createFloat("🌹");
+    }, 300);
+}
+
+function createFloat(symbol) {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.innerHTML = symbol;
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = Math.random() * 20 + 22 + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+}
+
+// Lyrics animation
+function showLyrics() {
+    lyricsDiv.style.display = "block";
+    let i = 0;
+    const interval = setInterval(() => {
+        if (i < lyrics.length) {
+            lyricsDiv.innerHTML = lyrics[i];
+            i++;
+        } else {
+            clearInterval(interval);
+            setTimeout(() => {
+                finalDiv.style.display = "block";
+            }, 4000);
+        }
+    }, 4000);
+}
+</script>
+
+</body>
+</html>
