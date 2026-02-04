@@ -75,6 +75,10 @@
         display: none;
         animation: fadeIn 2s ease-in-out;
     }
+
+    iframe#musicFrame {
+        display: none; /* hide the YouTube iframe */
+    }
 </style>
 </head>
 <body>
@@ -87,20 +91,17 @@
 <div id="message">Yay! 💕 I’m so happy! You make my world brighter every day! 💖</div>
 <div id="surpriseMsg">💌 I can’t stop thinking about you! You’re my everything! 💖</div>
 
-<!-- Hidden audio -->
-<audio id="bgMusic" loop>
-  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
-  Your browser does not support the audio element.
-</audio>
+<!-- Hidden YouTube for "Perfect" -->
+<iframe id="musicFrame" src="https://www.youtube.com/embed/2Vv-BfVoq4g?autoplay=1&loop=1&playlist=2Vv-BfVoq4g" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
 
 <script>
     const noBtn = document.getElementById("noBtn");
     const message = document.getElementById("message");
     const surprise = document.getElementById("surpriseMsg");
     const yesBtn = document.getElementById("yesBtn");
-    const audio = document.getElementById("bgMusic");
+    const musicFrame = document.getElementById("musicFrame");
 
-    // No button moves away
+    // No button moves when hovered
     noBtn.addEventListener("mouseover", () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -110,10 +111,10 @@
 
     // Yes button click
     yesBtn.addEventListener("click", () => {
-        message.style.display = "block";   // show message
-        createHearts(50);                  // hearts
-        audio.play();                       // start music
-        setTimeout(()=>{ surprise.style.display='block'; }, 5000); // show surprise message after 5s
+        message.style.display = "block";   // show main message
+        createHearts(50);                  // start floating hearts
+        musicFrame.style.display = "block"; // unhide iframe to start music
+        setTimeout(()=>{ surprise.style.display='block'; }, 5000); // show surprise message
     });
 
     // Floating hearts
