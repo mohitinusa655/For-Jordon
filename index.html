@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Jordon, Will You Be My Valentine? ❤️</title>
+<style>
+    body {
+        text-align: center;
+        font-family: "Segoe UI", sans-serif;
+        background: linear-gradient(to bottom, #ffccd5, #ffe6eb);
+        overflow: hidden;
+        margin-top: 120px;
+    }
+    h1 { 
+        color: #d6336c; 
+        font-size: 42px; 
+        animation: fadeIn 2s ease-in-out; 
+    }
+    button {
+        font-size: 22px;
+        padding: 12px 28px;
+        margin: 20px;
+        border: none;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: 0.3s;
+    }
+    #yesBtn { background-color: #ff4d6d; color: white; }
+    #yesBtn:hover { transform: scale(1.1); }
+    #noBtn {
+        background-color: #888;
+        color: white;
+        position: absolute;
+        left: 55%;
+        top: 60%;
+    }
+    .heart {
+        position: fixed;
+        color: red;
+        font-size: 20px;
+        animation: floatUp 4s linear infinite;
+        user-select: none;
+    }
+    @keyframes floatUp {
+        0% { transform: translateY(100vh); opacity: 1; }
+        100% { transform: translateY(-10vh); opacity: 0; }
+    }
+    @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
+    #message {
+        font-size: 28px;
+        color: #d6336c;
+        margin-top: 40px;
+        display: none;
+        animation: fadeIn 2s ease-in-out;
+    }
+</style>
+</head>
+<body>
+
+<h1>Jordon, Will You Be My Valentine? ❤️</h1>
+
+<button id="yesBtn" onclick="sayYes()">Yes 💖</button>
+<button id="noBtn">No 😢</button>
+
+<div id="message">Yay! 💕 I’m so happy! You make my world brighter every day! 💖</div>
+
+<!-- Hidden background music -->
+<iframe width="0" height="0" 
+    src="https://www.youtube.com/embed/uOdphGs5uN0?autoplay=1&loop=1&playlist=uOdphGs5uN0" 
+    frameborder="0" allow="autoplay; encrypted-media" allowfullscreen>
+</iframe>
+
+<script>
+    const noBtn = document.getElementById("noBtn");
+    const message = document.getElementById("message");
+
+    // Make the No button move away
+    noBtn.addEventListener("mouseover", () => {
+        const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
+        const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
+        noBtn.style.left = x + "px";
+        noBtn.style.top = y + "px";
+    });
+
+    // Yes button action
+    function sayYes() {
+        // Removed alert pop-up
+        message.style.display = "block"; // show the hidden message
+        createHearts(50); // start floating hearts
+    }
+
+    // Floating hearts function
+    function createHearts(count=10) {
+        for (let i=0; i<count; i++) {
+            setTimeout(() => {
+                const heart = document.createElement("div");
+                heart.classList.add("heart");
+                heart.innerHTML = "❤️";
+                heart.style.left = Math.random()*100 + "vw";
+                heart.style.fontSize = (Math.random()*30+20) + "px";
+                document.body.appendChild(heart);
+                setTimeout(()=>{ heart.remove(); }, 4000);
+            }, i*200);
+        }
+
+        setInterval(()=>{
+            const heart = document.createElement("div");
+            heart.classList.add("heart");
+            heart.innerHTML = "❤️";
+            heart.style.left = Math.random()*100 + "vw";
+            heart.style.fontSize = (Math.random()*30+20) + "px";
+            document.body.appendChild(heart);
+            setTimeout(()=>{ heart.remove(); }, 4000);
+        }, 300);
+    }
+</script>
+
+</body>
+</html>
