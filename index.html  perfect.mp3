@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Jordon ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #ffd1dc, #ff9a9e);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Brush Script MT", cursive;
+    overflow: hidden;
+}
+
+h1 {
+    font-size: 46px;
+    color: #b8003c;
+    text-align: center;
+    text-shadow: 0 0 15px pink;
+}
+
+button {
+    font-size: 24px;
+    padding: 14px 34px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 15px;
+}
+
+#yes {
+    background: #ff2f6d;
+    color: white;
+}
+
+#no {
+    background: #777;
+    color: white;
+    position: absolute;
+}
+
+#loveText {
+    display: none;
+    font-size: 34px;
+    color: #b8003c;
+    margin-top: 20px;
+    animation: glow 2s infinite alternate;
+}
+
+@keyframes glow {
+    from { text-shadow: 0 0 10px pink; }
+    to { text-shadow: 0 0 25px red; }
+}
+
+.float {
+    position: fixed;
+    font-size: 28px;
+    animation: floatUp 6s linear forwards;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+
+.firework {
+    position: fixed;
+    font-size: 30px;
+    animation: explode 1.5s ease-out forwards;
+}
+
+@keyframes explode {
+    from { transform: scale(0); opacity: 1; }
+    to { transform: scale(3); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Jordon, will you be my Valentine? ❤️</h1>
+
+<button id="yes">Yes 💖</button>
+<button id="no">No 😢</button>
+
+<div id="loveText">I found a love… 💕</div>
+
+<audio id="song" src="perfect.mp3" preload="auto" loop></audio>
+
+<script>
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const song = document.getElementById("song");
+const loveText = document.getElementById("loveText");
+
+// Move NO button
+noBtn.addEventListener("mouseover", () => {
+    noBtn.style.left = Math.random() * 80 + "vw";
+    noBtn.style.top = Math.random() * 80 + "vh";
+});
+
+// YES button
+yesBtn.addEventListener("click", () => {
+    loveText.style.display = "block";
+    song.currentTime = 0;
+    song.play();
+    startLove();
+    fireworks();
+});
+
+// Hearts, roses, flowers
+function startLove() {
+    setInterval(() => {
+        createFloat("❤️");
+        createFloat("🌹");
+        createFloat("🌸");
+    }, 250);
+}
+
+function createFloat(symbol) {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.innerHTML = symbol;
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = Math.random() * 20 + 22 + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+}
+
+// Fireworks
+function fireworks() {
+    setInterval(() => {
+        const fw = document.createElement("div");
+        fw.className = "firework";
+        fw.innerHTML = "🎆";
+        fw.style.left = Math.random() * 100 + "vw";
+        fw.style.top = Math.random() * 100 + "vh";
+        document.body.appendChild(fw);
+        setTimeout(() => fw.remove(), 1500);
+    }, 800);
+}
+</script>
+
+</body>
+</html>
