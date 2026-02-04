@@ -6,16 +6,26 @@
 <style>
     body {
         text-align: center;
-        font-family: "Segoe UI", sans-serif;
-        background: linear-gradient(to bottom, #ffccd5, #ffe6eb);
+        font-family: "Brush Script MT", cursive;
+        background: linear-gradient(-45deg, #ffccd5, #ffe6eb, #ffd1dc, #ffc0cb);
+        background-size: 400% 400%;
+        animation: gradientBG 15s ease infinite;
         overflow: hidden;
         margin-top: 120px;
     }
+
+    @keyframes gradientBG {
+        0% {background-position: 0% 50%;}
+        50% {background-position: 100% 50%;}
+        100% {background-position: 0% 50%;}
+    }
+
     h1 { 
         color: #d6336c; 
         font-size: 42px; 
         animation: fadeIn 2s ease-in-out; 
     }
+
     button {
         font-size: 22px;
         padding: 12px 28px;
@@ -25,8 +35,16 @@
         cursor: pointer;
         transition: 0.3s;
     }
-    #yesBtn { background-color: #ff4d6d; color: white; }
-    #yesBtn:hover { transform: scale(1.1); }
+
+    #yesBtn { 
+        background-color: #ff4d6d; 
+        color: white; 
+    }
+    #yesBtn:hover { 
+        transform: scale(1.1);
+        box-shadow: 0 0 20px #ff4d6d;
+    }
+
     #noBtn {
         background-color: #888;
         color: white;
@@ -34,6 +52,7 @@
         left: 55%;
         top: 60%;
     }
+
     .heart {
         position: fixed;
         color: red;
@@ -41,12 +60,15 @@
         animation: floatUp 4s linear infinite;
         user-select: none;
     }
+
     @keyframes floatUp {
         0% { transform: translateY(100vh); opacity: 1; }
         100% { transform: translateY(-10vh); opacity: 0; }
     }
+
     @keyframes fadeIn { from {opacity: 0;} to {opacity: 1;} }
-    #message {
+
+    #message, #surpriseMsg {
         font-size: 28px;
         color: #d6336c;
         margin-top: 40px;
@@ -63,8 +85,9 @@
 <button id="noBtn">No 😢</button>
 
 <div id="message">Yay! 💕 I’m so happy! You make my world brighter every day! 💖</div>
+<div id="surpriseMsg">💌 I can’t stop thinking about you! You’re my everything! 💖</div>
 
-<!-- Hidden audio for "Perfect" -->
+<!-- Hidden audio -->
 <audio id="bgMusic" loop>
   <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
   Your browser does not support the audio element.
@@ -73,10 +96,11 @@
 <script>
     const noBtn = document.getElementById("noBtn");
     const message = document.getElementById("message");
+    const surprise = document.getElementById("surpriseMsg");
     const yesBtn = document.getElementById("yesBtn");
     const audio = document.getElementById("bgMusic");
 
-    // No button moves when hovered
+    // No button moves away
     noBtn.addEventListener("mouseover", () => {
         const x = Math.random() * (window.innerWidth - noBtn.offsetWidth);
         const y = Math.random() * (window.innerHeight - noBtn.offsetHeight);
@@ -84,11 +108,12 @@
         noBtn.style.top = y + "px";
     });
 
-    // Yes button action
+    // Yes button click
     yesBtn.addEventListener("click", () => {
-        message.style.display = "block";   // Show message
-        createHearts(50);                  // Start hearts
-        audio.play();                       // Play music
+        message.style.display = "block";   // show message
+        createHearts(50);                  // hearts
+        audio.play();                       // start music
+        setTimeout(()=>{ surprise.style.display='block'; }, 5000); // show surprise message after 5s
     });
 
     // Floating hearts
@@ -100,6 +125,7 @@
                 heart.innerHTML = "❤️";
                 heart.style.left = Math.random()*100 + "vw";
                 heart.style.fontSize = (Math.random()*30+20) + "px";
+                heart.style.color = ['#ff4d6d','#ff69b4','#ffc0cb'][Math.floor(Math.random()*3)];
                 document.body.appendChild(heart);
                 setTimeout(()=>{ heart.remove(); }, 4000);
             }, i*200);
@@ -111,6 +137,7 @@
             heart.innerHTML = "❤️";
             heart.style.left = Math.random()*100 + "vw";
             heart.style.fontSize = (Math.random()*30+20) + "px";
+            heart.style.color = ['#ff4d6d','#ff69b4','#ffc0cb'][Math.floor(Math.random()*3)];
             document.body.appendChild(heart);
             setTimeout(()=>{ heart.remove(); }, 4000);
         }, 300);
