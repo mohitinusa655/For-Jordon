@@ -1,132 +1,3 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For You ❤️</title>
-
-<style>
-body {
-  margin: 0;
-  height: 100vh;
-  background: radial-gradient(circle, #ffd1dc, #ff9a9e);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-family: "Segoe Script", cursive;
-  overflow: hidden;
-  text-align: center;
-  padding: 20px;
-}
-
-h1 { color: #b8003c; }
-
-button {
-  font-size: 22px;
-  padding: 14px 34px;
-  border-radius: 18px;
-  border: none;
-  cursor: pointer;
-}
-
-#yes { background: #ff2f6d; color: white; }
-#no {
-  background: #999;
-  color: white;
-  position: absolute;
-}
-
-#lyrics {
-  font-size: 30px;
-  margin-top: 25px;
-  min-height: 50px;
-}
-
-.word {
-  opacity: 0.3;
-  transition: 0.3s;
-}
-
-.word.active {
-  opacity: 1;
-  color: #b8003c;
-  text-shadow: 0 0 10px #ff7aa2;
-}
-
-#proposal { display: none; animation: fadeIn 2s ease; }
-
-#name {
-  font-size: 42px;
-  color: #ff2f6d;
-  text-shadow: 0 0 15px #ff7aa2;
-  animation: glow 2s infinite alternate;
-}
-
-#ring {
-  font-size: 90px;
-  cursor: pointer;
-  animation: sparkle 1.5s infinite alternate;
-}
-
-#finalMsg {
-  font-size: 22px;
-  margin-top: 15px;
-  color: #7a0026;
-}
-
-.float {
-  position: fixed;
-  font-size: 28px;
-  animation: rise 6s linear forwards;
-}
-
-.firework {
-  position: fixed;
-  font-size: 40px;
-  animation: explode 2.5s ease-out forwards;
-}
-
-@keyframes rise {
-  from { transform: translateY(100vh); opacity: 1; }
-  to { transform: translateY(-10vh); opacity: 0; }
-}
-@keyframes sparkle {
-  from { transform: scale(1); }
-  to { transform: scale(1.3); }
-}
-@keyframes explode {
-  from { transform: scale(0); opacity: 1; }
-  to { transform: scale(4); opacity: 0; }
-}
-@keyframes glow {
-  from { text-shadow: 0 0 10px #ff7aa2; }
-  to { text-shadow: 0 0 25px #ff2f6d; }
-}
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-</style>
-</head>
-
-<body>
-
-<h1 id="question">Will you be my Valentine? ❤️</h1>
-<button id="yes">Yes 💖</button>
-<button id="no">No 😢</button>
-
-<div id="lyrics"></div>
-
-<div id="proposal">
-  <div id="name"></div>
-  <div id="ring">💍</div>
-  <h1>Will you be mine forever? ❤️</h1>
-  <div id="finalMsg">Tap the ring 💍</div>
-</div>
-
-<audio id="song" src="perfect.mp3"></audio>
-
 <script>
 const herName = "Jordon"; // 💖 CHANGE NAME HERE
 
@@ -140,13 +11,19 @@ const ring = document.getElementById("ring");
 
 nameDiv.textContent = herName;
 
-// Karaoke data (relative to vocal start)
-const vocalOffset = 18.8;
+// 1. TUNED TIMING: "Perfect" vocals start around 18.8s
+// If the lyrics appear too early, DECREASE this number.
+// If they appear too late, INCREASE this number.
+const vocalOffset = 18.5; 
+
+// 2. UPDATED DATA: 
+// I adjusted the 'time' to match the actual song rhythm better.
 const karaoke = [
   { time: 0, words: ["I", "found", "a", "love…"] },
-  { time: 4.5, words: ["For", "me…"] },
-  { time: 9, words: ["Darling,", "just", "dive", "right", "in…"] },
-  { time: 14, words: ["And", "follow", "my", "lead…"] }
+  { time: 3.8, words: ["For", "me…"] },
+  { time: 7.5, words: ["Darling,", "just", "dive", "right", "in…"] },
+  { time: 11.5, words: ["And", "follow", "my", "lead…"] },
+  { time: 15.5, words: ["Well", "I", "found", "a", "girl...", "beautiful", "and", "sweet"] } // Added extra line for transition
 ];
 
 let currentLine = -1;
@@ -164,32 +41,48 @@ yesBtn.onclick = () => {
   song.play();
   startHearts();
 
+  // Show proposal after the lyrics are done (approx 20s)
   setTimeout(() => {
     fadeOutSong();
     showProposal();
-  }, 18000);
+  }, 20000); 
 };
 
-// Karaoke sync
+// Karaoke sync logic
 song.addEventListener("timeupdate", () => {
+  // Get current time relative to when vocals start
   const t = song.currentTime - vocalOffset;
-  for (let i = karaoke.length - 1; i >= 0; i--) {
+  
+  for (let i = 0; i < karaoke.length; i++) {
+    // Check if we hit the time for this line AND haven't shown it yet
     if (t >= karaoke[i].time && currentLine !== i) {
-      showLine(karaoke[i]);
       currentLine = i;
+      
+      // Calculate how long this line should take based on the NEXT line's start time
+      let duration = 3000; // Default 3 seconds if it's the last line
+      if (i < karaoke.length - 1) {
+        duration = (karaoke[i + 1].time - karaoke[i].time) * 1000;
+      }
+      
+      showLine(karaoke[i], duration);
       break;
     }
   }
 });
 
-function showLine(line) {
+function showLine(line, duration) {
   clearInterval(wordTimer);
+  
   lyricsDiv.innerHTML = line.words
     .map(w => `<span class="word">${w}</span>`)
     .join(" ");
 
   const words = document.querySelectorAll(".word");
   let index = 0;
+
+  // KEY FIX: Calculate speed based on how much time we have vs. how many words
+  // We subtract 200ms to ensure the words finish just before the next line starts
+  const speed = (duration - 200) / words.length;
 
   wordTimer = setInterval(() => {
     if (index < words.length) {
@@ -198,7 +91,7 @@ function showLine(line) {
     } else {
       clearInterval(wordTimer);
     }
-  }, 500);
+  }, speed);
 }
 
 function fadeOutSong() {
@@ -245,6 +138,3 @@ function startFireworks() {
   }, 400);
 }
 </script>
-
-</body>
-</html>
