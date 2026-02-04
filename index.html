@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Jordon ❤️</title>
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle, #ffdde1, #ee9ca7);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-family: "Brush Script MT", cursive;
+    overflow: hidden;
+    text-align: center;
+}
+
+h1 {
+    font-size: 46px;
+    color: #b8003c;
+    text-shadow: 0 0 15px pink;
+}
+
+button {
+    font-size: 24px;
+    padding: 14px 36px;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    margin: 12px;
+}
+
+#yes {
+    background: #ff2f6d;
+    color: white;
+}
+
+#no {
+    background: #777;
+    color: white;
+    position: absolute;
+}
+
+#lyrics {
+    margin-top: 25px;
+    font-size: 30px;
+    color: #b8003c;
+    text-shadow: 0 0 15px pink;
+    min-height: 42px;
+    transition: opacity 0.6s ease;
+}
+
+.float {
+    position: fixed;
+    font-size: 28px;
+    animation: floatUp 6s linear forwards;
+}
+
+@keyframes floatUp {
+    from { transform: translateY(100vh); opacity: 1; }
+    to { transform: translateY(-10vh); opacity: 0; }
+}
+</style>
+</head>
+
+<body>
+
+<h1>Jordon, will you be my Valentine? ❤️</h1>
+
+<button id="yes">Yes 💖</button>
+<button id="no">No 😢</button>
+
+<div id="lyrics"></div>
+
+<audio id="song" src="perfect.mp3" preload="auto"></audio>
+
+<script>
+const yesBtn = document.getElementById("yes");
+const noBtn = document.getElementById("no");
+const song = document.getElementById("song");
+const lyricsDiv = document.getElementById("lyrics");
+
+// Timed for ORIGINAL studio version
+const syncedLyrics = [
+  { time: 0, text: "" },
+  { time: 18, text: "I found a love… 💕" },
+  { time: 23, text: "For me…" },
+  { time: 28, text: "Darling, just dive right in…" },
+  { time: 33, text: "And follow my lead…" },
+  { time: 38, text: "Well, I found a girl…" },
+  { time: 43, text: "Beautiful and sweet…" },
+  { time: 50, text: "Oh, I never knew you were the someone waiting for me…" },
+  { time: 60, text: "’Cause we were just kids when we fell in love…" },
+  { time: 70, text: "Not knowing what it was…" },
+  { time: 78, text: "I will not give you up this time…" },
+  { time: 88, text: "Darling, just kiss me slow…" },
+  { time: 96, text: "Your heart is all I own…" },
+  { time: 104, text: "And in your eyes, you’re holding mine…" },
+  { time: 115, text: "Baby, I’m dancing in the dark… 💫" }
+];
+
+// No button escapes
+noBtn.addEventListener("mouseover", () => {
+    noBtn.style.left = Math.random() * 80 + "vw";
+    noBtn.style.top = Math.random() * 80 + "vh";
+});
+
+// Start song & visuals
+yesBtn.addEventListener("click", () => {
+    song.currentTime = 0;
+    song.play();
+    startLove();
+});
+
+// Floating hearts & roses
+function startLove() {
+    setInterval(() => {
+        createFloat("❤️");
+        createFloat("🌹");
+    }, 300);
+}
+
+function createFloat(symbol) {
+    const el = document.createElement("div");
+    el.className = "float";
+    el.innerHTML = symbol;
+    el.style.left = Math.random() * 100 + "vw";
+    el.style.fontSize = Math.random() * 20 + 22 + "px";
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 6000);
+}
+
+// Sync lyrics to audio playback
+song.addEventListener("timeupdate", () => {
+    const current = song.currentTime;
+    for (let i = syncedLyrics.length - 1; i >= 0; i--) {
+        if (current >= syncedLyrics[i].time) {
+            lyricsDiv.textContent = syncedLyrics[i].text;
+            break;
+        }
+    }
+});
+</script>
+
+</body>
+</html>
