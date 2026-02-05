@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>For Jordon ❤️</title>
+
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: linear-gradient(to top, #ff758c, #ff7eb3);
+  font-family: 'Poppins', sans-serif;
+  overflow: hidden;
+  text-align: center;
+  color: white;
+}
+
+.screen {
+  display: none;
+  padding: 20px;
+}
+
+.active {
+  display: block;
+}
+
+h1 {
+  margin-top: 18vh;
+  font-size: 2.3rem;
+}
+
+button {
+  padding: 14px 28px;
+  font-size: 1.1rem;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+#yes {
+  background: #ff2d75;
+  color: white;
+}
+
+#no {
+  position: absolute;
+  background: #555;
+  color: white;
+}
+
+.name {
+  font-size: 3rem;
+  font-weight: bold;
+  margin-top: 20px;
+  text-shadow: 0 0 15px #ff69b4, 0 0 30px #ff1493;
+}
+
+.lyrics {
+  margin-top: 30px;
+  font-size: 1.3rem;
+  min-height: 60px;
+}
+
+.ring {
+  font-size: 4.5rem;
+  margin-top: 25px;
+  cursor: pointer;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.15); }
+  100% { transform: scale(1); }
+}
+
+.effect {
+  position: absolute;
+  animation: rise 4s linear forwards;
+}
+
+@keyframes rise {
+  from { transform: translateY(100vh); opacity: 1; }
+  to { transform: translateY(-10vh); opacity: 0; }
+}
+
+.final {
+  margin-top: 25px;
+  font-size: 1.5rem;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SCREEN 1 -->
+<div id="start" class="screen active">
+  <h1>Will you be my Valentine? 💖</h1>
+  <button id="yes">Yes 💕</button>
+  <button id="no">No 😅</button>
+</div>
+
+<!-- SCREEN 2 -->
+<div id="love" class="screen">
+  <div class="name">Jordon 💖</div>
+  <div class="lyrics" id="lyrics"></div>
+  <div class="ring" id="ring">💍</div>
+  <div class="final" id="final"></div>
+</div>
+
+<audio id="song" src="perfect.mp3"></audio>
+
+<script>
+const yes = document.getElementById("yes");
+const no = document.getElementById("no");
+const song = document.getElementById("song");
+const lyricsBox = document.getElementById("lyrics");
+const ring = document.getElementById("ring");
+const finalMsg = document.getElementById("final");
+
+const lyrics = [
+  "I found a love, for me ❤️",
+  "Darling, just dive right in 💕",
+  "Well I found a girl, beautiful and sweet ✨",
+  "Oh I never knew you were the someone waiting for me 💖"
+];
+
+// Move NO button
+no.addEventListener("mouseover", () => {
+  no.style.left = Math.random() * 80 + "%";
+  no.style.top = Math.random() * 80 + "%";
+});
+
+// YES pressed
+yes.onclick = () => {
+  document.getElementById("start").classList.remove("active");
+  document.getElementById("love").classList.add("active");
+
+  song.currentTime = 0;
+  song.volume = 1;
+  song.play();
+
+  let i = 0;
+  const lyricInterval = setInterval(() => {
+    if (i < lyrics.length) {
+      lyricsBox.innerText = lyrics[i];
+      i++;
+    } else {
+      clearInterval(lyricInterval);
+    }
+  }, 4000);
+
+  // Fade out music
+  setTimeout(() => {
+    const fade = setInterval(() => {
+      if (song.volume > 0.05) {
+        song.volume -= 0.05;
+      } else {
+        song.pause();
+        clearInterval(fade);
+      }
+    }, 200);
+  }, 18000);
+};
+
+// Ring click → fireworks
+ring.onclick = () => {
+  for (let i = 0; i < 40; i++) {
+    createEffect("🎆");
+    createEffect("❤️");
+    createEffect("🌹");
+  }
+
+  finalMsg.innerHTML = `
+    Will you be mine forever? 💍💖<br><br>
+    Every moment with you is my favorite story.
+  `;
+};
+
+function createEffect(symbol) {
+  const el = document.createElement("div");
+  el.className = "effect";
+  el.innerText = symbol;
+  el.style.left = Math.random() * 100 + "vw";
+  el.style.fontSize = Math.random() * 30 + 20 + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 4000);
+}
+</script>
+
+</body>
+</html>
