@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>For Jorden ❤️</title>
+<style>
+body {
+  margin: 0;
+  height: 100vh;
+  background: radial-gradient(circle, #ff9a9e, #fad0c4);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: 'Segoe UI', sans-serif;
+  overflow: hidden;
+}
+
+.card {
+  background: white;
+  padding: 30px;
+  border-radius: 20px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+}
+
+button {
+  padding: 12px 25px;
+  font-size: 18px;
+  border: none;
+  border-radius: 30px;
+  cursor: pointer;
+  margin: 10px;
+}
+
+#yes {
+  background: #ff4d6d;
+  color: white;
+}
+
+#no {
+  background: #aaa;
+  position: absolute;
+}
+
+#proposal {
+  display: none;
+}
+
+.ring {
+  font-size: 80px;
+  cursor: pointer;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.heart, .rose, .firework {
+  position: absolute;
+  font-size: 24px;
+  animation: float 3s linear forwards;
+}
+
+@keyframes float {
+  from { opacity: 1; transform: translateY(0); }
+  to { opacity: 0; transform: translateY(-150px); }
+}
+</style>
+</head>
+
+<body>
+
+<audio id="song" loop>
+  <source src="perfect.mp3" type="audio/mpeg">
+</audio>
+
+<div class="card" id="question">
+  <h1>💖 Jorden 💖</h1>
+  <h2>Will you be my Valentine?</h2>
+  <button id="yes">Yes 💘</button>
+  <button id="no">No 🙈</button>
+</div>
+
+<div class="card" id="proposal">
+  <h1>My Love ❤️</h1>
+  <h2>Will you be mine forever?</h2>
+  <p>You are my today, my tomorrow, and my always.</p>
+  <div class="ring">💍</div>
+</div>
+
+<script>
+const noBtn = document.getElementById("no");
+const yesBtn = document.getElementById("yes");
+const song = document.getElementById("song");
+
+noBtn.addEventListener("mouseover", () => {
+  noBtn.style.left = Math.random() * (window.innerWidth - 100) + "px";
+  noBtn.style.top = Math.random() * (window.innerHeight - 50) + "px";
+});
+
+yesBtn.addEventListener("click", () => {
+  document.getElementById("question").style.display = "none";
+  document.getElementById("proposal").style.display = "block";
+  song.play();
+});
+
+document.querySelector(".ring").addEventListener("click", () => {
+  for (let i = 0; i < 40; i++) {
+    createEffect("❤️");
+    createEffect("🌹");
+    createEffect("🎆");
+  }
+});
+
+function createEffect(symbol) {
+  const el = document.createElement("div");
+  el.className = "heart";
+  el.innerText = symbol;
+  el.style.left = Math.random() * window.innerWidth + "px";
+  el.style.top = window.innerHeight + "px";
+  document.body.appendChild(el);
+  setTimeout(() => el.remove(), 3000);
+}
+</script>
+
+</body>
+</html>
